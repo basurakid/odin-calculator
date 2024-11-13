@@ -2,16 +2,57 @@ const display = document.querySelector(".display");
 const result = document.querySelector(".result");
 const inputs = document.querySelector(".inputs");
 
-addBtnListeners();
+
+createBtnListeners();
 
 
-function addBtnListeners() {
-    const updateDisplayBtn = Array.from(document.querySelectorAll("updates"));
-    updateDisplayBtn.forEach((btn) => btn.addEventListener(updateDisplay(btn.textContent)));
+function createBtnListeners() {
+
+    const updateDisplayBtn = Array.from(document.querySelectorAll(".updates"));
+    updateDisplayBtn.forEach((btn) => btn.addEventListener("click", updateDisplay));
+
+    const deleteBtn = document.querySelector(".delete");
+    deleteBtn.addEventListener("click", deleteDisplay);
+
+    const clearBtn = document.querySelector(".clear");
+    clearBtn.addEventListener("click", clearDisplay);
+
+    const operatorBtn = Array.from(document.querySelectorAll(".operator"));
+    operatorBtn.forEach(btn => btn.addEventListener("click", setOperation));
+
+    const decimalBtn = document.querySelector(".decimal");
+    decimalBtn.addEventListener("click", setDecimal);
 }
 
-function updateDisplay(content) {
-    display.textContent = content;
+function updateDisplay(e) {
+    console.log(e.target.textContent);
+    inputs.textContent += e.target.textContent;
+}
+
+function deleteDisplay() {
+    inputs.textContent = inputs.textContent.slice(0,-1);
+}
+
+function clearDisplay() {
+    inputs.textContent = "";
+    result.textContent = "";
+}
+
+function setOperation(e) {
+    const operator = e.target.textContent;
+    if (result.textContent.includes(operator)){
+        return
+    }
+    //else if()
+}
+
+function setDecimal() {
+    if (inputs.includes(".")){
+        return
+    }
+    else{
+        inputs.textContent += ".";
+    }
 }
 
 function operate(op, x, y) {

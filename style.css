@@ -57,9 +57,11 @@ button {
 }
 
 button:hover {
+    filter: brightness(95%);
+}
+button:active {
     filter: brightness(90%);
 }
-
 .right button {
     width: 100%;
 }
