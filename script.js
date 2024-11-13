@@ -1,15 +1,15 @@
-const display = document.querySelector(".display");
 const result = document.querySelector(".result");
 const inputs = document.querySelector(".inputs");
 
+let isOperationSet = false;
 
 createBtnListeners();
 
 
 function createBtnListeners() {
 
-    const updateDisplayBtn = Array.from(document.querySelectorAll(".updates"));
-    updateDisplayBtn.forEach((btn) => btn.addEventListener("click", updateDisplay));
+    const numberBtn = Array.from(document.querySelectorAll(".number"));
+    numberBtn.forEach((btn) => btn.addEventListener("click", updateNumber));
 
     const deleteBtn = document.querySelector(".delete");
     deleteBtn.addEventListener("click", deleteDisplay);
@@ -24,13 +24,22 @@ function createBtnListeners() {
     decimalBtn.addEventListener("click", setDecimal);
 }
 
-function updateDisplay(e) {
-    console.log(e.target.textContent);
+function updateNumber(e) {
+
+    if (inputs.textContent === "0"){
+        inputs.textContent = "";
+    }
     inputs.textContent += e.target.textContent;
 }
 
 function deleteDisplay() {
-    inputs.textContent = inputs.textContent.slice(0,-1);
+    if (inputs.textContent.length < 2){ 
+        inputs.textContent = "0";
+    }
+    else {
+        inputs.textContent = inputs.textContent.slice(0,-1);
+    }
+    
 }
 
 function clearDisplay() {
@@ -40,10 +49,26 @@ function clearDisplay() {
 
 function setOperation(e) {
     const operator = e.target.textContent;
-    if (result.textContent.includes(operator)){
+    const resultText = result.textContent;
+    const listOfOperators = ["+","-","x","÷"];
+
+    // No operator in the results, add operator with input number
+    if (listOfOperators.some(operationSign => resultText.includes(operationSign) === false)){
+        result.textContent = inputs.textContent + " " + operator;
         return
     }
-    //else if()
+
+    // if user clicks on the same operator, nothing happens
+    if (!resultText.split(" ")[2]){
+        result.textContent.splice(-1, 1, operator)
+        return
+    }
+    
+    
+
+    else if (resultText.includes("+") || resultText.includes("-") || resultText.includes("x") || resultText.includes("÷")){
+
+    }
 }
 
 function setDecimal() {
