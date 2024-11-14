@@ -1,8 +1,6 @@
 const resultPara = document.querySelector(".result");
 const inputPara = document.querySelector(".input");
 
-let isOperationSet = false;
-
 createBtnListeners();
 
 
@@ -32,6 +30,7 @@ function updateNumber(e) {
     if (inputPara.textContent === "0"){
         inputPara.textContent = "";
     }
+
     inputPara.textContent += e.target.textContent;
 }
 
@@ -46,7 +45,7 @@ function deleteDisplay() {
 }
 
 function clearDisplay() {
-    inputPara.textContent = "";
+    inputPara.textContent = "0";
     resultPara.textContent = "";
 }
 
@@ -56,27 +55,38 @@ function setOperation(e) {
     const listOfOperators = ["+","-","x","÷"];
 
     // No operator in the results, add operator with input number
-    if (listOfOperators.some(operationSign => resultText.includes(operationSign) === false)){
-        resultPara.textContent = inputPara.textContent + " " + operator;
-        return
+    if (!listOfOperators.some(operationSign => resultText.includes(operationSign))){
+        if (resultText){
+            resultPara.textContent = `${resultText} ${operator}`
+        }
+        else {
+            resultPara.textContent = inputPara.textContent + " " + operator;
+            inputPara.textContent = "0";
+        }
+        return;
     }
     // If there's already operator but not 2nd operand, we change operator.
     else if (!resultText.split(" ")[2]){
-        resultPara.textContent.splice(-1, 1, operator)
-        return
+        const splitText = resultText.split(" ");
+        resultPara.textContent = `${splitText[0]} ${operator}`;
+        return;
     }
     // If the operation is all set, we resolve it and apply the operator to the resultPara
-    else {
-        resolve();
-        resultPara.textContent += " " + operator;
-    }
+    //else {
+    //    resolve();
+    //    resultPara.textContent += " " + operator;
+    //}
 
 }
 
 function resolve() {
-    const expression = resultPara.textContent.split(" ");
-    if (expression.length === 3) {
-        resultPara.textContent = operate(expression[1], expression[0], expression[2])
+    let expression = resultPara.textContent.split(" ");
+
+    if (expression.length === 2) {
+        resultPara.textContent += " " + inputPara.textContent;
+        expression = resultPara.textContent.split(" ");
+        console.log(operate(expression[1], expression[0], expression[2]));
+        resultPara.textContent = operate(expression[1], expression[0], expression[2]);
         inputPara.textContent = "0";
     }
 
@@ -92,6 +102,8 @@ function setDecimal() {
 }
 
 function operate(op, x, y) {
+    x = parseInt(x);
+    y = parseInt(y);
     if (op === "+"){
         return add(x, y);
     }
@@ -121,6 +133,9 @@ function operate(op, x, y) {
     }
     
     function divide(x, y) {
+        if (y === 0){
+            return 
+        }
         return x / y;
     }
 }
