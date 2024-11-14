@@ -1,5 +1,5 @@
-const result = document.querySelector(".result");
-const inputs = document.querySelector(".inputs");
+const resultPara = document.querySelector(".result");
+const inputPara = document.querySelector(".input");
 
 let isOperationSet = false;
 
@@ -22,61 +22,72 @@ function createBtnListeners() {
 
     const decimalBtn = document.querySelector(".decimal");
     decimalBtn.addEventListener("click", setDecimal);
+
+    const equalBtn = document.querySelector(".resolve");
+    equalBtn.addEventListener("click", resolve);
 }
 
 function updateNumber(e) {
 
-    if (inputs.textContent === "0"){
-        inputs.textContent = "";
+    if (inputPara.textContent === "0"){
+        inputPara.textContent = "";
     }
-    inputs.textContent += e.target.textContent;
+    inputPara.textContent += e.target.textContent;
 }
 
 function deleteDisplay() {
-    if (inputs.textContent.length < 2){ 
-        inputs.textContent = "0";
+    if (inputPara.textContent.length < 2){ 
+        inputPara.textContent = "0";
     }
     else {
-        inputs.textContent = inputs.textContent.slice(0,-1);
+        inputPara.textContent = inputPara.textContent.slice(0,-1);
     }
     
 }
 
 function clearDisplay() {
-    inputs.textContent = "";
-    result.textContent = "";
+    inputPara.textContent = "";
+    resultPara.textContent = "";
 }
 
 function setOperation(e) {
     const operator = e.target.textContent;
-    const resultText = result.textContent;
+    const resultText = resultPara.textContent;
     const listOfOperators = ["+","-","x","÷"];
 
     // No operator in the results, add operator with input number
     if (listOfOperators.some(operationSign => resultText.includes(operationSign) === false)){
-        result.textContent = inputs.textContent + " " + operator;
+        resultPara.textContent = inputPara.textContent + " " + operator;
         return
     }
-
-    // if user clicks on the same operator, nothing happens
-    if (!resultText.split(" ")[2]){
-        result.textContent.splice(-1, 1, operator)
+    // If there's already operator but not 2nd operand, we change operator.
+    else if (!resultText.split(" ")[2]){
+        resultPara.textContent.splice(-1, 1, operator)
         return
     }
-    
-    
-
-    else if (resultText.includes("+") || resultText.includes("-") || resultText.includes("x") || resultText.includes("÷")){
-
+    // If the operation is all set, we resolve it and apply the operator to the resultPara
+    else {
+        resolve();
+        resultPara.textContent += " " + operator;
     }
+
+}
+
+function resolve() {
+    const expression = resultPara.textContent.split(" ");
+    if (expression.length === 3) {
+        resultPara.textContent = operate(expression[1], expression[0], expression[2])
+        inputPara.textContent = "0";
+    }
+
 }
 
 function setDecimal() {
-    if (inputs.includes(".")){
+    if (inputPara.includes(".")){
         return
     }
     else{
-        inputs.textContent += ".";
+        inputPara.textContent += ".";
     }
 }
 
