@@ -57,7 +57,7 @@ function setOperation(e) {
     // No operator in the results, add operator with input number
     if (!listOfOperators.some(operationSign => resultText.includes(operationSign))){
         if (resultText){
-            resultPara.textContent = `${resultText} ${operator}`
+            resultPara.textContent = `${resultText} ${operator}`;
         }
         else {
             resultPara.textContent = inputPara.textContent + " " + operator;
@@ -85,7 +85,6 @@ function resolve() {
     if (expression.length === 2) {
         resultPara.textContent += " " + inputPara.textContent;
         expression = resultPara.textContent.split(" ");
-        console.log(operate(expression[1], expression[0], expression[2]));
         resultPara.textContent = operate(expression[1], expression[0], expression[2]);
         inputPara.textContent = "0";
     }
@@ -121,21 +120,26 @@ function operate(op, x, y) {
     }
 
     function add(x,y) {
-        return x + y; 
+        const total = x + y;
+        return total % 1 ? total.toFixed(2) : total;
     }
     
     function subtract(x, y) {
-        return x - y; 
+        const total = x - y;
+        return total % 1 ? total.toFixed(2) : total;
     }
     
     function multiply(x, y) {
-        return x * y;
+        const total = x * y;
+        return total % 1 ? total.toFixed(2) : total;
     }
     
     function divide(x, y) {
         if (y === 0){
-            return 
+            alert("NICE TRY!")
+            return
         }
-        return x / y;
+        const total = x / y;
+        return total % 1 ? total.toFixed(2) : total;
     }
 }
